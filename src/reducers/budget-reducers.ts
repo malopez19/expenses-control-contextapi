@@ -13,12 +13,20 @@ export const initialState : BudgetState = {
 export const budgetReducer = (
 	state: BudgetState = initialState, action: BudgetActions
 ) => {
+	/* switch (action.type) {
+		case 'add-budget':
+			return { ...state, budget: action.payload.budget }
+		default:
+			return state
+	} */
+
 	if(action.type === 'add-budget'){
 		return {
 			...state, 
 			budget: action.payload.budget
 		}
 	}	
+
 	
 	return state
 }
