@@ -1,8 +1,36 @@
+import { useState, ChangeEvent } from "react";
+import type { DraftExpense, Value } from "../types";
 import { categories } from "../data/categories";
-
+import DatePicker from 'react-date-picker';
+import 'react-date-picker/dist/DatePicker.css';
+import 'react-calendar/dist/Calendar.css';
 
 
 export default function ExpenseForm() {
+
+  const [expense, setExpense] = useState<DraftExpense>({
+    expenseName: '',
+    amount: 0,
+    category: '',
+    date: new Date()
+  })
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>) => {
+    const { name, value } = e.target
+    const isAmountField = ['amount'].includes(name)
+
+    setExpense({
+      ...expense,
+      [name]: isAmountField ? Number(value) : value
+    })
+  }
+
+  const handleChangeDate = (value: Value) => {
+    setExpense({
+      ...expense,
+      date: value
+    })
+  }
   return (
     <form className="space-y-5">
       <legend
@@ -22,6 +50,8 @@ export default function ExpenseForm() {
           placeholder="Añade el nombre del gasto"
           className="bg-slate-100 p-2"
           name="expenseName"
+          value={expense.expenseName}
+          onChange={handleChange}
         />
       </div>
 
@@ -38,6 +68,8 @@ export default function ExpenseForm() {
           placeholder="Añade la cantidad del gasto ej: 300"
           className="bg-slate-100 p-2"
           name="amount"
+          value={expense.amount}
+          onChange={handleChange}
         />
       </div>
 
@@ -52,6 +84,8 @@ export default function ExpenseForm() {
           id="category"
           className="bg-slate-100 p-2"
           name="amount"
+          value={expense.category}
+          onChange={handleChange}
         >
           <option value="">-- seleccione --</option>
           {categories.map(category => (
@@ -62,6 +96,20 @@ export default function ExpenseForm() {
             </option>
           ))}
         </select>
+      </div>
+
+      <div className="flex flex-col gap-2"> 
+        <label
+          htmlFor="amount"
+          className="text-2xl"
+          >
+          Fecha gasto:
+        </label>
+        <DatePicker 
+          className="bg-slate-100 p-2 border-0"
+          value={expense.date}
+          onChange={handleChangeDate}
+        />
       </div>
 
       <input 
